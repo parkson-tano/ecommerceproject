@@ -9,4 +9,7 @@ urlpatterns = [
 	path('contact/', ContactView.as_view(), name='contact'),
 	path('all-product', AllProductsView.as_view(), name='allproduct'),
 	path('product/<slug:slug>/', ProductDetailsView.as_view(), name='productdetail'),
+	path('add-to-cart-<int:pro_id>', AddToCartView.as_view(), name='addtocart'),
+
+	path('my-cart', MyCartView.as_view(), name='mycart')
 ]

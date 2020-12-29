@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+    My cart
+{% endblock title %}
+
+{% block content %}
+    <div class="row">
+    	<div class="col-md-8">
+    		<h4>Items in my Cart</h4>
+    		<table class='table'>
+    			<thead>
+    				<tr>
+    					<th>SN</th>
+    					<th>Product</th>
+    					<th>Rate</th>
+    					<th>Quantity</th>
+    					<th>Subtotal</th>
+    					<th>Action</th>
+    				</tr>
+    				<tbody>
+    					{% for c in cart.cartproduct_set.all %}
+    					<tr>
+    						<td> {{forloop.counter}} </td>
+    						<td>{{ c.product.title }}</td>
+    						<td> {{c.rate}} </td>
+    						<td> {{c.quantity}} </td>
+    						<td> {{c.subtotal}} </td>
+    						<td>
+    							<a href="" class="btn btn-primary"> + </a>
+    							<a href="" class="btn btn-warning"> - </a>
+    							<a href="" class="btn btn-danger"> x </a>
+    						</td>
+    					</tr>
+    					{% endfor %}
+    					<tr>
+    						<th colspan="4" class="text-right">Total</th>
+    						<th> {{cart.total}} FCFA </th>
+    					</tr>
+    				</tbody>
+    			</th
+    		</table>
+    	</div>
+    </div>
+{% endblock content %}

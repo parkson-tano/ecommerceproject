@@ -40,12 +40,12 @@ class  Cart(models.Model):
 class CartProduct(models.Model):
 	cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
-	rate = models.PositiveIntegerField()
-	quantity = models.PositiveIntegerField()
-	subtotal = models.PositiveIntegerField()
+	rate = models.PositiveIntegerField(default=1)
+	quantity = models.PositiveIntegerField(default=1)
+	subtotal = models.PositiveIntegerField(default=1)
 
 	def __str__(self):
-		return f"Cart: {str*self.cart.id} CartProduct {str(self.id)}"
+		return f"Cart: {str(self.cart.id)} CartProduct {str(self.id)}"
 
 ORDER_STATUS = (
 		('Order Recieved', 'Order Recieved'),

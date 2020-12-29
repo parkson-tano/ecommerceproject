@@ -16,7 +16,7 @@
         </h3>
         <img src="{{pro.image.url}}" alt="" class="img-fluid" style="height : 2500; object-fit: cover">
         <p class="mt-3">Price: <strike>{{pro.marked_price}} FCFA</strike> {{pro.selling_price}} FCFA </p>
-        <a href="" class="btn btn-primary">Add to Cart</a>
+        <a href="{% url 'ecommerceapp:addtocart' pro.id %}" class="btn btn-primary">Add to Cart</a>
     	</div>
     </div>
     {% endfor %}

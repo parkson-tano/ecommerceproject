@@ -14,7 +14,7 @@
     		<h5>{{product.title}} (Viewed: {{product.view_count}} times) </h5>
     		<h5> {{product.category}} </h5><hr>
     		<h5>Price: <strike>{{product.marked_price}} FCFA</strike> {{product.selling_price}} FCFA </p> </h5>
-    		<a href="" class="btn btn-info">Add to Cart</a><hr>
+    		<a href="{% url 'ecommerceapp:addtocart' product.id %}" class="btn btn-info">Add to Cart</a><hr>
     		<p>Warranty: {{product.warranty}}</p>
     		<p>Return Policy: {{product.return_policy}} </p><hr>
     		    <i> {{product.description}} </i>
