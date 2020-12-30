@@ -27,16 +27,32 @@
     						<td> {{c.quantity}} </td>
     						<td> {{c.subtotal}} </td>
     						<td>
-    							<a href="" class="btn btn-primary"> + </a>
-    							<a href="" class="btn btn-warning"> - </a>
-    							<a href="" class="btn btn-danger"> x </a>
+    							<a href=" {% url 'ecommerceapp:managecart' c.id %}?action=inc" class="btn btn-primary"> + </a>
+    							<a href="{% url 'ecommerceapp:managecart' c.id %}?action=dcr" class="btn btn-warning"> - </a>
+    							<a href="{% url 'ecommerceapp:managecart' c.id %}?action=rmv" class="btn btn-danger"> x </a>
     						</td>
     					</tr>
     					{% endfor %}
     					<tr>
     						<th colspan="4" class="text-right">Total</th>
     						<th> {{cart.total}} FCFA </th>
+    						<th>
+    							{% if cart.cartproduct_set.all %}
+    							    <a href="{% url 'ecommerceapp:emptycart' %}" class="btn btn-danger"> Empty Cart </a>
+    							{% endif %}
+    							
+    						</th>
+
     					</tr>
+    					{% if cart.cartproduct_set.all %}
+    					        					<tr>
+    						<th colspan="4" class="text-right">
+    							<a href=" {% url "ecommerceapp:checkout"%} " class="btn btn-info">Checkout</a>
+    						</th>
+    					</tr>
+    					
+    					{% endif %}
+
     				</tbody>
     			</th
     		</table>
