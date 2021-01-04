@@ -178,3 +178,25 @@ class CheckOutView(CreateView):
 	    context['cart'] = cart_obj
 
 	    return context
+
+class CustomerRegistrationView(CreateView):
+	template_name = 'customerregistration.html'
+	form_class =  CustomerRegistrationForm
+	success_url = reverse_lazy('ecommerceapp:index')
+
+	def form_valid(self, form):
+		username = form.cleaned_data.get('username')
+		password = form.cleaned_data.get('password')
+		email = form.cleaned_data.get('email')
+
+		user = User.objects.create_user(username, email, password)
+		form.instance.user = user
+		return super().form_valid(form)
+
+	def clean_username(self):
+		username = self.cleaned_data.get('username')
+		if User.objects.filter(username=uname).exists:
+			raise forms.ValidationError('this username already exists')
+		
+		return uname
+

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+customer registraion
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h3>customer registraion</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{  form| crispy}}
+                <input type="submit" class="btn btn-success" value="Register">
+            </form>
+            {{error}}
+            
+        </div>
+    </div>
+</div>
+{% endblock content %}
