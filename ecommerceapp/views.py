@@ -197,6 +197,19 @@ class CustomerLoginView(FormView):
 	template_name = 'customerlogin.html'
 	form_class =  CustomerLoginForm
 	success_url = reverse_lazy('ecommerceapp:index')
+
+	def form_valid(self, form):
+		uname = form.cleaned_data.get('username')
+		pword = form.cleaned_data.get('password')
+		usr = authenticate(username=uname, password=pword)
+		if usr is not None and usr.customer:
+			login(self.request, usr)
+		else:
+			return render(self.request, self.template_name, {'form': self.form_class, 'error':'invalid creditials'})	
+
+
+		return super().form_valid(form)
+    	
 		
 
 

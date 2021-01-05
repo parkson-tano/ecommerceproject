@@ -16,18 +16,18 @@ class CustomerRegistrationForm(forms.ModelForm):
 		fields = ['username','password','email','full_name', 'address']
 
 	
-	# def clean_username(self):
-	# 	uname = self.cleaned_data.get('username')
-	# 	if User.objects.filter(username=uname).exists:
-	# 		raise forms.ValidationError('this username already exists')
+	def clean_username(self):
+		uname = self.cleaned_data.get('username')
+		if User.objects.filter(username=uname).exists():
+			raise forms.ValidationError('this username already exists')
 		
-	# 	return uname
+		return uname
 
-	# def clean_email(self):
-	# 	emai = self.cleaned_data.get('email')
-	# 	if User.objects.filter(email=emai).exists:
-	# 		raise forms.ValidationError('this email already exists')
-	# 	return emai
+	def clean_email(self):
+		emai = self.cleaned_data.get('email')
+		if User.objects.filter(email=emai).exists():
+			raise forms.ValidationError('this email already exists')
+		return emai
 
 class CustomerLoginForm(forms.Form):
 	username = forms.CharField(widget=forms.TextInput())
