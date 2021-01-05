@@ -31,9 +31,22 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'ecommerceapp:mycart' %}">My Cart</a>
                 </li>
+                {% if request.user.customer %}
                 <li class="nav-item">
+                   Welcome {{request.user.username}} 
+                </li>
+                    <li class="nav-item">
+                        <a href="{% url "ecommerceapp:customerlogout"%}" class="nav-link">Logout</a>
+                    </li>
+                {% else %}
+                                <li class="nav-item">
                     <a class="nav-link" href="{% url 'ecommerceapp:customerregistration' %}">Register</a>
                 </li>
+                <li class="nav-item">
+                        <a href="{% url "ecommerceapp:customerlogin"%}" class="nav-link">Login</a>
+                    </li>
+                {% endif %}
+    
             </ul>
         </div>
     </nav>

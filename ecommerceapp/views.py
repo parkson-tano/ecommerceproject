@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View, CreateView
+from django.views.generic import TemplateView, View, CreateView, FormView
 from .models import *
 from .forms import *
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-import random 
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 class IndexView(TemplateView):
@@ -188,15 +188,20 @@ class CustomerRegistrationView(CreateView):
 		username = form.cleaned_data.get('username')
 		password = form.cleaned_data.get('password')
 		email = form.cleaned_data.get('email')
-
 		user = User.objects.create_user(username, email, password)
 		form.instance.user = user
+		login(self.request, user)
 		return super().form_valid(form)
 
-	def clean_username(self):
-		username = self.cleaned_data.get('username')
-		if User.objects.filter(username=uname).exists:
-			raise forms.ValidationError('this username already exists')
+class CustomerLoginView(FormView):
+	template_name = 'customerlogin.html'
+	form_class =  CustomerLoginForm
+	success_url = reverse_lazy('ecommerceapp:index')
 		
-		return uname
 
+
+class CustomerLogoutView(View):
+	
+	def get(self, request):
+		logout(request)
+		return redirect('ecommerceapp:index')
