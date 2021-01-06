@@ -5,9 +5,23 @@ from .forms import *
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-class IndexView(TemplateView):
+class EcoMixin(object):
+
+	def dispatch(self, request, *args, **kwargs):
+
+		cart_id = request.session.get('cart_id')
+		if cart_id:
+			cart_obj = Cart.objects.get(id=cart_id)
+			if request.user.is_authenticated and request.user.customer:
+				cart_obj.customer = request.user.customer
+				cart_obj.save()
+		return  super().dispatch(request, *args, **kwargs)
+
+
+class IndexView(EcoMixin,TemplateView):
 	template_name = 'index.html'
 	
 	def get_context_data(self, **kwargs):
@@ -16,13 +30,13 @@ class IndexView(TemplateView):
 		context['product_list'] = Product.objects.all().order_by('-id')
 		return context
 
-class AboutView(TemplateView):
+class AboutView(EcoMixin,TemplateView):
 	template_name = 'about.html'
 
-class ContactView(TemplateView):
+class ContactView(EcoMixin,TemplateView):
 	template_name = 'contact.html'
 
-class AllProductsView(TemplateView):
+class AllProductsView(EcoMixin,TemplateView):
 	template_name = 'allproduct.html'
 
 	def get_context_data(self, **kwargs):
@@ -31,7 +45,7 @@ class AllProductsView(TemplateView):
 
 	    return context
 
-class ProductDetailsView(TemplateView):
+class ProductDetailsView(EcoMixin, TemplateView):
 	template_name = 'productdetails.html'
 	def get_context_data(self, **kwargs):
 	    context = super().get_context_data(**kwargs)
@@ -42,7 +56,7 @@ class ProductDetailsView(TemplateView):
 	    context['product'] = product
 	    return context
 	
-class AddToCartView(TemplateView):
+class AddToCartView(EcoMixin,TemplateView):
 	template_name = 'addtocart.html'
 
 	def get_context_data(self, **kwargs):
@@ -84,7 +98,7 @@ class AddToCartView(TemplateView):
 		#check if product already exist in cart
 		return context
 
-class MyCartView(TemplateView):
+class MyCartView(EcoMixin,TemplateView):
 	template_name = 'mycart.html'
 
 	def get_context_data(self, **kwargs):
@@ -98,7 +112,7 @@ class MyCartView(TemplateView):
 	    context['cart'] = cart
 	    return context
 
-class ManageCartView(View):
+class ManageCartView(EcoMixin, View):
 	def get(self, request, **kwargs):
 		c_id = self.kwargs['c_id']
 		action = request.GET.get('action')
@@ -130,7 +144,7 @@ class ManageCartView(View):
 			pass
 		return redirect('ecommerceapp:mycart')
 
-class EmptyCartView(View):
+class EmptyCartView(EcoMixin,View):
 
 	def get(self, request, **kwargs):
 		cart_id = request.session.get('cart_id', None)
@@ -144,11 +158,20 @@ class EmptyCartView(View):
 		return redirect('ecommerceapp:mycart')
 
 
-class CheckOutView(CreateView):
+class CheckOutView(EcoMixin,CreateView):
 	template_name = 'checkout.html'
 	form_class = CheckOutForm
 	success_url = reverse_lazy('ecommerceapp:index')
 	#@method_decorator(csrf_exempt)
+
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated and request.user.customer:
+			pass
+		else:
+			return redirect('/login/?next=/checkout/')
+
+		return super().dispatch(request, *args, **kwargs)
+
 	def form_valid(self, form):
 		cart_id = self.request.session.get('cart_id')
 		if cart_id:
@@ -209,8 +232,14 @@ class CustomerLoginView(FormView):
 
 
 		return super().form_valid(form)
-    	
-		
+
+	def get_success_url(self):
+		if 'next' in self.request.GET:
+			next_url = self.request.GET.get('next')
+			print(next_url)
+			return next_url 	
+		else:
+			return self.success_url
 
 
 class CustomerLogoutView(View):

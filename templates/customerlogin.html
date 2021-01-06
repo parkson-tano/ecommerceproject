@@ -17,6 +17,9 @@
 						</div>
 					{% endif %}
     			</form>
+                <p> <a href=" {% url "ecommerceapp:customerregistration" %} 
+                    {% if request.GET.next %}?next={{request.GET.next}} 
+                {% endif %}">Already has an account?</a></p>
     		</div>
     	</div>
     </div>
