@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% block title %}
+Customer profile
+{% endblock title %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <h3>Detail Information</h3>
+        <hr>
+        <p><span class="font-weight-bold">Name:</span> {{customer.full_name}} </p>
+        <p><span class="font-weight-bold">Email:</span> {{customer.user.email}} </p>
+        <p><span class="font-weight-bold">Username:</span> {{customer.user.username}} </p>
+        <p><span class="font-weight-bold">Address:</span> {{customer.address}} </p>
+        <p><span class="font-weight-bold">Joined on:</span> {{customer.joined_on}} </p>
+        <p><span class="font-weight-bold">Last seen:</span> {{customer.user.last_login|timesince}} </p>
+    </div>
+    <div class="col-md-8">
+        <h3>Previous Order</h3>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Order ID</th>
+                    <th>Amount</th>
+                    <th>Ordered On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ord in order %}
+                <tr>
+                    <td> {{ forloop.counter }} </td>
+                    <td> <a href=" {% url "ecommerceapp:customerorderdetails" ord.pk %} ">Order:{{ord.id}}</a>  </td>
+                    <td> {{ ord.total }}FCFA </td>
+                    <td> {{ ord.created_at|timesince }} </td>
+                    <td> {{ ord.order_status }} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

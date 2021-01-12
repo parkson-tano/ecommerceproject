@@ -19,6 +19,9 @@ urlpatterns = [
 	path('register/', CustomerRegistrationView.as_view(), name='customerregistration'),
 	path('login/', CustomerLoginView.as_view(), name='customerlogin'),
 	path('logout/', CustomerLogoutView.as_view(), name='customerlogout'),
+
+	path('profile/', CustomerProfileView.as_view(), name='customerprofile'),
+	path('profile/order<int:pk>', CustomerOrderDetailView.as_view(), name='customerorderdetails'),
 	
 
 ]
