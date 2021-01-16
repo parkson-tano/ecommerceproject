@@ -287,3 +287,9 @@ class CustomerOrderDetailView(DetailView):
 			return redirect('/login/?next=/profile/')
 
 		return super().dispatch(request, *args, **kwargs)
+
+
+class AdminPanelView(TemplateView):
+	template_name = 'adminpanel.html'
+
+	
