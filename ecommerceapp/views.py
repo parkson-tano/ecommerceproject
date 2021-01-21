@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View, CreateView, FormView, DetailView
+from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView
 from .models import *
 from .forms import *
 from django.urls import reverse_lazy
+from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -15,7 +16,7 @@ class EcoMixin(object):
 		cart_id = request.session.get('cart_id')
 		if cart_id:
 			cart_obj = Cart.objects.get(id=cart_id)
-			if request.user.is_authenticated and request.user.customer:
+			if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
 				cart_obj.customer = request.user.customer
 				cart_obj.save()
 		return  super().dispatch(request, *args, **kwargs)
@@ -165,7 +166,7 @@ class CheckOutView(EcoMixin,CreateView):
 	#@method_decorator(csrf_exempt)
 
 	def dispatch(self, request, *args, **kwargs):
-		if request.user.is_authenticated and request.user.customer:
+		if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
 			pass
 		else:
 			return redirect('/login/?next=/checkout/')
@@ -225,7 +226,7 @@ class CustomerLoginView(FormView):
 		uname = form.cleaned_data.get('username')
 		pword = form.cleaned_data.get('password')
 		usr = authenticate(username=uname, password=pword)
-		if usr is not None and usr.customer:
+		if usr is not None and Customer.objects.filter(user=usr).exists():
 			login(self.request, usr)
 		else:
 			return render(self.request, self.template_name, {'form': self.form_class, 'error':'invalid creditials'})	
@@ -253,7 +254,7 @@ class CustomerProfileView(TemplateView):
 
 
 	def dispatch(self, request, *args, **kwargs):
-		if request.user.is_authenticated and request.user.customer:
+		if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
 			pass
 		else:
 			return redirect('/login/?next=/profile/')
@@ -276,7 +277,7 @@ class CustomerOrderDetailView(DetailView):
 	context_object_name = 'ord_obj'
 
 	def dispatch(self, request, *args, **kwargs):
-		if request.user.is_authenticated and request.user.customer:
+		if request.user.is_authenticated and rCustomer.objects.filter(user=request.user).exists():
 			order_id = self.kwargs['pk']
 			order = Order.objects.get(id=order_id)
 			if request.user.customer != order.cart.customer:
@@ -287,3 +288,87 @@ class CustomerOrderDetailView(DetailView):
 			return redirect('/login/?next=/profile/')
 
 		return super().dispatch(request, *args, **kwargs)
+
+class SearchView(TemplateView):
+	template_name = 'search.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		kw = self.request.GET['keyword']
+		results = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw))
+		context['results'] = results 
+		return context
+
+
+### ---------admin class----------
+class AdminLoginView(FormView):
+	template_name = 'adminpages/adminlogin.html'
+	form_class = CustomerLoginForm
+	success_url = reverse_lazy('ecommerceapp:adminhome')
+	def form_valid(self, form):
+		uname = form.cleaned_data.get('username')
+		pword = form.cleaned_data.get('password')
+		usr = authenticate(username=uname, password=pword)
+		if usr is not None and Admin.objects.filter(user=usr).exists():
+			login(self.request, usr)
+		else:
+			return render(self.request, self.template_name, {'form': self.form_class, 'error':'invalid creditials'})	
+
+
+		return super().form_valid(form)
+
+	def get_success_url(self):
+		if 'next' in self.request.GET:
+			next_url = self.request.GET.get('next')
+			print(next_url)
+			return next_url 	
+		else:
+			return self.success_url
+
+class AdminRequiredMixin(object):
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated and Admin.objects.filter(user=request.user).exists():
+			pass
+		else:
+			return redirect('/admin-login')
+
+		return super().dispatch(request, *args, **kwargs)
+
+class AdminHomeView(AdminRequiredMixin, TemplateView):
+	template_name = 'adminpages/adminhome.html'
+
+	def get_context_data(self, **kwargs):
+	    context = super().get_context_data(**kwargs)
+	    context['pendingorders'] = Order.objects.filter(order_status ='Order Recieved').order_by('-created_at')
+
+	    return context
+
+class AdminOrderView(AdminRequiredMixin, DetailView):
+	template_name = 'adminpages/adminorderdetails.html'
+	model = Order
+	context_object_name = 'ord_obj'
+	def get_context_data(self, **kwargs):
+	    context = super().get_context_data(**kwargs)
+	    context['allstatus'] = ORDER_STATUS
+	    return context
+
+class AdminOrderListView(AdminRequiredMixin, ListView):
+	template_name = 'adminpages/adminlistorder.html'
+	queryset = Order.objects.all().order_by('-id')
+	context_object_name = 'allorders'
+
+class AdminOrderStatusChangeView(AdminRequiredMixin, View):
+	def post(self, request, *arg, **kwargs):
+		order_id = self.kwargs['pk']
+		order_obj = Order.objects.get(id=order_id)
+		new_status = request.POST.get('status')
+		order_obj.order_status = new_status
+		order_obj.save()
+		return redirect(reverse_lazy('ecommerceapp:adminorderdetail', kwargs={'pk': order_id}))
+
+class AdminLogoutView(View):
+	
+	def get(self, request):
+		logout(request)
+		return redirect('ecommerceapp:adminhome')	
+

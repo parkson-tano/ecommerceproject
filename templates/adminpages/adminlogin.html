@@ -1,0 +1,26 @@
+{% extends "adminpages/adminbase.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Login 
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+    	<div class="row">
+    		<div class="col-md-6 mx-auto">
+    			<form action="" method='POST'>
+    				{% csrf_token %}
+    				{{form | crispy}}
+					<input type="submit" class="btn btn-success" value="Admin Login">
+					{% if error %}
+						<div class='alert alert-danger'> {{error}}
+						</div>
+					{% endif %}
+    			</form>
+                <p> <a href=" {% url "ecommerceapp:customerregistration" %} 
+                    {% if request.GET.next %}?next={{request.GET.next}} 
+                {% endif %}">Already has an account?</a></p>
+    		</div>
+    	</div>
+    </div>
+{% endblock content %}

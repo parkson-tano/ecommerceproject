@@ -21,7 +21,16 @@ urlpatterns = [
 	path('logout/', CustomerLogoutView.as_view(), name='customerlogout'),
 
 	path('profile/', CustomerProfileView.as_view(), name='customerprofile'),
-	path('profile/order<int:pk>', CustomerOrderDetailView.as_view(), name='customerorderdetails'),
+	path('profile/order-<int:pk>', CustomerOrderDetailView.as_view(), name='customerorderdetails'),
+	path('search/', SearchView.as_view(), name='search'),
 	
 
+	##admin view
+	path('admin-login', AdminLoginView.as_view(), name='adminlogin'),
+	path('admin-home', AdminHomeView.as_view(), name='adminhome'),
+	path('admin-order/<int:pk>', AdminOrderView.as_view(), name='adminorderdetail'),
+	path('admin-all-orders/', AdminOrderListView.as_view(), name='adminlistview'),
+	path('admin-logout', AdminLogoutView.as_view(), name='adminlogout'),
+
+	path('admin-order-<int:pk>-change/', AdminOrderStatusChangeView.as_view(), name='adminorderchange')
 ]
