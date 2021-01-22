@@ -37,35 +37,29 @@
                    Welcome {{request.user.username}} 
                 </li>
                 <li class="nav-item">
-                        <a href="{% url "ecommerceapp:customerprofile"%}" class="nav-link">My Profile</a>
+                        <a href="{% url "ecommerceapp:customerprofile" %}" class="nav-link">My Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url "ecommerceapp:customerlogout"%}" class="nav-link">Logout</a>
+                        <a href="{% url "ecommerceapp:customerlogout" %}" class="nav-link">Logout</a>
                     </li>
                 {% else %}
                                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'ecommerceapp:customerregistration' %}">Register</a>
                 </li>
                 <li class="nav-item">
-                        <a href="{% url "ecommerceapp:customerlogin"%}" class="nav-link">Login</a>
+                        <a href="{% url "ecommerceapp:customerlogin" %}" class="nav-link">Login</a>
                     </li>
                 {% endif %}
     
             </ul>
+                          <form action=" {% url "ecommerceapp:search" %} " method="GET" class="d-flex">
+                {% csrf_token %}
+                  <input class="form-control me-2 mx-auto" type="text"  name='keyword' placeholder="Search Product" required>
+                  <button class="btn-primary">Search</button>
+              </form>
     </div>
   </div>
   <hr>
-  <div class="container">
-      <div class="row">
-          <div class="col-md-4 mx-auto">
-              <form action=" {% url "ecommerceapp:search" %} " method="GET">
-                {% csrf_token %}
-                  <input type="text"  name='keyword' placeholder="Search Product" required>
-                  <button class="btn-primary">Search</button>
-              </form>
-          </div>
-      </div>
-  </div>
 </nav>
         {% block content %}
         {% endblock %}
