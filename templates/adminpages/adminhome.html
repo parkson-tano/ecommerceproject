@@ -20,7 +20,7 @@ Admin Homepage
                     {% for order in pendingorders %}
                     <tr>
                         <th> {{ forloop.counter }} </th>
-                        <th> <a href=" {% url " ecommerceapp:adminorderdetail" order.id %}">#Order:{{ order.id }} </a>
+                        <th> <a href=" {% url "ecommerceapp:adminorderdetail" order.id %}">#Order:{{ order.id }} </a>
                         </th>
                         <th> {{ order.ordered_by }} </th>
                         <th> {{ order.created_at }} </th>

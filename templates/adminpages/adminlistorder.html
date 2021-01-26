@@ -1,4 +1,4 @@
-{% extends "adminpages/adminbase.htmlw" %}
+{% extends "adminpages/adminbase.html" %}
 {% load humanize %}
 {% block title %}
 Order list
@@ -24,7 +24,7 @@ Order list
                     {% for order in allorders %}
                     <tr>
                         <th> {{ forloop.counter }} </th>
-                        <th> <a href=" {% url " ecommerceapp:adminorderdetail" order.id %}">#Order:{{ order.id }} </a>
+                        <th> <a href=" {% url "ecommerceapp:adminorderdetail" order.id %}">#Order:{{ order.id }} </a>
                         </th>
                         <th> {{ order.ordered_by }} </th>
                         <th> {{ order.created_at }} </th>

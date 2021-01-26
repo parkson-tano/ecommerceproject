@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 # Create your views here.
 
 class EcoMixin(object):
@@ -28,7 +29,11 @@ class IndexView(EcoMixin,TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['name'] = 'Parkson tano daniel'
-		context['product_list'] = Product.objects.all().order_by('-id')
+		all_product = Product.objects.all().order_by('-id')
+		paginator = Paginator(all_product, 8)
+		page_number = self.request.GET.get('page')
+		product_list = paginator.get_page(page_number)
+		context['product_list'] = product_list
 		return context
 
 class AboutView(EcoMixin,TemplateView):
@@ -339,7 +344,7 @@ class AdminHomeView(AdminRequiredMixin, TemplateView):
 
 	def get_context_data(self, **kwargs):
 	    context = super().get_context_data(**kwargs)
-	    context['pendingorders'] = Order.objects.filter(order_status ='Order Recieved').order_by('-created_at')
+	    context['pendingorders'] = Order.objects.filter(order_status ='Order Recieved')
 
 	    return context
 
