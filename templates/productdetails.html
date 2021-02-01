@@ -8,7 +8,16 @@
     <h3>Product: {{product.title}}</h3><hr>
     <div class="row">
     	<div class="col-md-6">
-    		    <img src=" {{product.image.url}} " alt="">
+				<img src=" {{product.image.url}} " alt="">
+				<div class='row'> 
+					{% for pi in product.productimage_set.all  %}
+					<div class='col-md-3 p-3'>
+					<a href='{{ pi.image.url }}' target='_blank'>
+						<img src="{{ pi.image.url }}" class='img-fluid' style='height:100px; object-fit: contain;'>
+					</a>
+					</div>
+					{% endfor %}
+				</div>
     	</div>
     	<div class="col">
     		<h5>{{product.title}} (Viewed: {{product.view_count}} times) </h5>

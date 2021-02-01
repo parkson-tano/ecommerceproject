@@ -1,13 +1,17 @@
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView
-from .models import *
-from .forms import *
-from django.urls import reverse_lazy
-from django.db.models import Q
-from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import (CreateView, DetailView, FormView, ListView,
+                                  TemplateView, View)
+
+from .forms import *
+from .models import *
+
+
 # Create your views here.
 class EcoMixin(object):
 
@@ -20,7 +24,6 @@ class EcoMixin(object):
 				cart_obj.customer = request.user.customer
 				cart_obj.save()
 		return  super().dispatch(request, *args, **kwargs)
-
 
 class IndexView(EcoMixin,TemplateView):
 	template_name = 'index.html'
@@ -162,7 +165,6 @@ class EmptyCartView(EcoMixin,View):
 
 		return redirect('ecommerceapp:mycart')
 
-
 class CheckOutView(EcoMixin,CreateView):
 	template_name = 'checkout.html'
 	form_class = CheckOutForm
@@ -246,7 +248,6 @@ class CustomerLoginView(FormView):
 		else:
 			return self.success_url
 
-
 class CustomerLogoutView(View):
 	
 	def get(self, request):
@@ -281,7 +282,7 @@ class CustomerOrderDetailView(DetailView):
 	context_object_name = 'ord_obj'
 
 	def dispatch(self, request, *args, **kwargs):
-		if request.user.is_authenticated and rCustomer.objects.filter(user=request.user).exists():
+		if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
 			order_id = self.kwargs['pk']
 			order = Order.objects.get(id=order_id)
 			if request.user.customer != order.cart.customer:
@@ -302,7 +303,6 @@ class SearchView(TemplateView):
 		results = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw))
 		context['results'] = results 
 		return context
-
 
 ### ---------admin class----------
 class AdminLoginView(FormView):
@@ -348,6 +348,7 @@ class AdminHomeView(AdminRequiredMixin, TemplateView):
 	    return context
 
 class AdminOrderView(AdminRequiredMixin, DetailView):
+
 	template_name = 'adminpages/adminorderdetails.html'
 	model = Order
 	context_object_name = 'ord_obj'
@@ -375,4 +376,21 @@ class AdminLogoutView(View):
 	def get(self, request):
 		logout(request)
 		return redirect('ecommerceapp:adminhome')	
+
+class AdminProductListView(AdminRequiredMixin, ListView):
+	template_name = 'adminpages/adminproductlist.html'
+	queryset = Product.objects.all().order_by('-id')
+	context_object_name = 'allproducts'
+
+class AdminProductCreateView(AdminRequiredMixin, CreateView):
+	template_name = 'adminpages/adminproductcreate.html'
+	form_class = ProductForm
+	success_url = reverse_lazy('ecommerceapp:adminproductlist')
+
+	def form_valid(self, form):
+		p = form.save()
+		images = self.request.FILES.getlist('more_images')
+		for i in images:
+			ProductImage.objects.create(product=p, image=i)
+		return super().form_valid(form)
 

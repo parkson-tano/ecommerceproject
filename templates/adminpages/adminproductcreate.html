@@ -1,0 +1,23 @@
+{% extends "adminpages/adminbase.html" %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Add New Product
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mx-auto mb-1">
+                <h3>Upload Product</h3>
+            <hr>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form|crispy}}
+                <button class="btn btn-info">Upload Product</button>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock content %}

@@ -31,7 +31,7 @@ order detail
                 {% for cp in ord_obj.cart.cartproduct_set.all %}
                 <tr>
                     <td> {{forloop.counter}} </td>
-                    <td> <a target="_blank" href=" {% url " ecommerceapp:productdetail" cp.product.slug %} ">{{cp.product.title}} ({{cp.product.id}}) </a> </td>
+                    <td> <a target="_blank" href=" {% url "ecommerceapp:productdetail" cp.product.slug %} ">{{cp.product.title}} ({{cp.product.id}}) </a> </td>
                                 <td>{{ cp.rate }}</td>
                                 <td> {{cp.quantity}} </td>
                                 <td> {{cp.subtotal}} </td>

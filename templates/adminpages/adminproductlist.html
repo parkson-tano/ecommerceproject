@@ -1,0 +1,39 @@
+{% extends "adminpages/adminbase.html" %}
+{% load humanize %}
+{% block title %}
+    All Product
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h3>All product</h3>
+            <hr>
+            <a href="{% url 'ecommerceapp:admincreateproduct' %}">Add new Product</a>
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Product Title</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Views</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in allproducts %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ p.title }}</td>
+                        <td> <img src='{{ p.image.url }}' style='height: 75px'>  </td>
+                        <td>{{ p.selling_price }}</td>
+                        <td>{{ p.view_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django import forms
-from  .models import Order, Customer
+from  .models import Order, Customer, Product
 from django.contrib.auth.models import User
 
 class CheckOutForm(forms.ModelForm):
@@ -32,3 +32,44 @@ class CustomerRegistrationForm(forms.ModelForm):
 class CustomerLoginForm(forms.Form):
 	username = forms.CharField(widget=forms.TextInput())
 	password = forms.CharField(widget=forms.PasswordInput())
+
+class ProductForm(forms.ModelForm):
+
+	more_images = forms.FileField(required=False, widget=forms.FileInput(attrs={
+		'class': 'form-control',
+		'multiple': True
+	}))
+	class Meta:
+		model = Product
+		fields = ['title','slug','category','image', 'marked_price',
+		'selling_price', 'description', 'warranty', 'return_policy']
+
+		widgets = {
+			"title": forms.TextInput(attrs= { 
+				'placeholder': 'Enter the Product Title'
+			}),
+			"slug": forms.TextInput(attrs= { 
+				'placeholder': 'Enter the Product slug'
+			}),
+				"marked_price": forms.NumberInput(attrs= { 
+				'placeholder': 'Enter the Marked_Price'
+			}),
+			"selling_price": forms.NumberInput(attrs= { 
+				'placeholder': 'Enter the Selling Price'
+			}),
+			"description": forms.Textarea(attrs= { 
+			'placeholder': 'Enter the Product Description',
+			'rows': 5
+		
+			}),
+			"warranty": forms.TextInput(attrs= { 
+				'placeholder': 'Enter the Product Warranty'
+			}),
+				"return_policy": forms.TextInput(attrs= { 
+				'placeholder': 'Enter the Product return policy'
+			}),
+			"image": forms.FileInput(attrs= { 
+				'class':'form-control'
+			}),
+
+		}

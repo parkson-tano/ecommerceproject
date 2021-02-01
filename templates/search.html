@@ -16,7 +16,7 @@ search product
                 <div class="col-md-8">
                     <h4><a href="{% url 'ecommerceapp:productdetail' res.slug %}"> {{res.title}} </a> </h4>
                     {{res.description | truncatewords:30}}
-                    <p class="mt-3">Price: <strike>{{pro.marked_price}} FCFA</strike> {{pro.selling_price}} FCFA </p>
+                    <p class="mt-3">Price: <strike>{{res.marked_price}} FCFA</strike> {{res.selling_price}} FCFA </p>
                     <a href="{% url 'ecommerceapp:addtocart' res.id %}" class="btn btn-primary">Add to Cart</a>
                 </div>
                 <hr>
