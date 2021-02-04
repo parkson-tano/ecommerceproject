@@ -3,8 +3,47 @@
     <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 </head>
 <body>
-    <h3>Pay the sum of: {{ order.total }}FCFA</h3>
-    <form action="" method="get" data-monetbil="form"><button class="" type="submit">Pay by Mobile Money</button></form>
-    <script type="text/javascript" src="https://www.monetbil.com/widget/v2/monetbil.min.js"></script>
+    <h3>Your Order amount is:  {{ order.total }} FCFA</h3>
+    <!-- Place this where you need payment button -->
+    <button id="payment-button">Pay with Khalti</button>
+    <!-- Place this where you need payment button -->
+    <!-- Paste this code anywhere in you body tag -->
+    <script>
+        var config = {
+            // replace the publicKey with yours
+            "publicKey": "test_public_key_dc74e0fd57cb46cd93832aee0a390234",
+            "productIdentity": "Order_ {{order.id}}",
+            "productName": "Order_ {{order.id}}",
+            "productUrl": "http://localhost:8000",
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+                ],
+            "eventHandler": {
+                onSuccess (payload) {
+                    // hit merchant api for initiating verfication
+                    console.log(payload);
+                },
+                onError (error) {
+                    console.log(error);
+                },
+                onClose () {
+                    console.log('widget is closing');
+                }
+            }
+        };
+
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            // minimum transaction amount must be 10, i.e 1000 in paisa.
+            checkout.show({amount: {{order.total}} });
+        }
+    </script>
+    <!-- Paste this code anywhere in you body tag -->
+    ...
 </body>
 </html>

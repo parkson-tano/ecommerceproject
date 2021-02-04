@@ -17,7 +17,7 @@ urlpatterns = [
 	path('empty-cart/', EmptyCartView.as_view(), name='emptycart'),
 	path('checkout/', CheckOutView.as_view(), name='checkout'),
 	path('payment-request/', PaymentRequestView.as_view(), name='paymentrequest'),
-	path('payment-verify/', PaymentVerifyView.as_view(), name='paymentberify'),
+	path('payment-verify/', PaymentVerifyView.as_view(), name='paymentverify'),
 
 	path('register/', CustomerRegistrationView.as_view(), name='customerregistration'),
 	path('login/', CustomerLoginView.as_view(), name='customerlogin'),
