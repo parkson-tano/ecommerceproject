@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DetailView, FormView, ListView,
                                   TemplateView, View)
 
 from .forms import *
 from .models import *
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -126,6 +127,7 @@ class ManageCartView(EcoMixin, View):
 		action = request.GET.get('action')
 		c_obj = CartProduct.objects.get(id=c_id)
 		cart_obj = c_obj.cart
+		cart_obj.save()
 
 		if action == 'inc':
 			c_obj.quantity += 1
@@ -188,8 +190,12 @@ class CheckOutView(EcoMixin,CreateView):
 			form.instance.discount = 0
 			form.instance.total = cart_obj.total
 			form.instance.order_status = 'Order_Recieved'
-
 			del self.request.session['cart_id']
+			
+			pm =  form.cleaned_data.get('payment_method')
+			order = form.save()
+			if pm == 'Khalti':
+				return redirect(reverse('ecommerceapp:paymentrequest') + "?o_id="+ str(order.id))
 		else:
 			return redirect('ecommerceapp:index')
 
@@ -208,6 +214,24 @@ class CheckOutView(EcoMixin,CreateView):
 	    context['cart'] = cart_obj
 
 	    return context
+
+class PaymentRequestView(View):
+	def get(self,request, *args, **kwargs):
+		#context = super().get_context_data(**kwargs)
+		o_id = request.GET.get('o_id')
+		order = Order.objects.get(id=o_id)
+		context= {
+			'order' : order
+		} 
+		return render(request, 'paymentrequest.html', context)
+
+class PaymentVerifyView(View):
+	def get(self, request, *args, **kwargs):
+		data = {
+
+		}
+
+		return JsonResponse(data)
 
 class CustomerRegistrationView(CreateView):
 	template_name = 'customerregistration.html'
@@ -285,6 +309,17 @@ class CustomerOrderDetailView(DetailView):
 		if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
 			order_id = self.kwargs['pk']
 			order = Order.objects.get(id=order_id)
+
+			action = request.GET.get('action')
+			ord_obj = Order.objects.get(id=order_id)
+			order_obj = ord_obj.cart
+			if action == 'rmv':
+				order_obj.save()
+				order_obj.delete()
+				return redirect('ecommerceapp:customerprofile')
+			else:
+				pass
+
 			if request.user.customer != order.cart.customer:
 				return redirect('ecommerceapp:customerprofile')
 			else:
@@ -292,8 +327,10 @@ class CustomerOrderDetailView(DetailView):
 		else:
 			return redirect('/login/?next=/profile/')
 
+
 		return super().dispatch(request, *args, **kwargs)
 
+		
 class SearchView(TemplateView):
 	template_name = 'search.html'
 
