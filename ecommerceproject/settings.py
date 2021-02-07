@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'v#)chd(m$8-1*dbazlgvii--__!or(#f7mrscuarg9tt0f@7@k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["danitanolive.herokuapp.com", '127.0.0.1']
 
