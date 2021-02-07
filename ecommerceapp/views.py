@@ -7,7 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DetailView, FormView, ListView,
                                   TemplateView, View)
-
+from django.contrib import messages
 from .forms import *
 from .models import *
 from django.http import JsonResponse
