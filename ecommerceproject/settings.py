@@ -26,7 +26,7 @@ SECRET_KEY = 'v#)chd(m$8-1*dbazlgvii--__!or(#f7mrscuarg9tt0f@7@k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["danitano.herokuapp.com", '127.0.0.1']
+ALLOWED_HOSTS = ["danitanolive.herokuapp.com", '127.0.0.1']
 
 
 # Application definition
