@@ -37,5 +37,6 @@ urlpatterns = [
 
 	path('admin-order-<int:pk>-change/', AdminOrderStatusChangeView.as_view(), name='adminorderchange'),
 	path('admin-product/list/',  AdminProductListView.as_view(), name='adminproductlist'),
+	path('adminmanageproduct/<int:p_id>', AdminManageProductView.as_view(), name = 'adminmanageproduct'),
 	path('admin-product/add/', AdminProductCreateView.as_view(), name='admincreateproduct'),
 ]

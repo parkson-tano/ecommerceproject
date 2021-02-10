@@ -419,6 +419,20 @@ class AdminProductListView(AdminRequiredMixin, ListView):
 	queryset = Product.objects.all().order_by('-id')
 	context_object_name = 'allproducts'
 
+class AdminManageProductView(AdminRequiredMixin, View):
+	
+	def get(self, request, **kwargs):
+		p_id = self.kwargs['p_id']
+		action = request.GET.get('action')
+		p_obj = Product.objects.get(id=p_id)
+		p_obj.save()	
+
+		if action == 'rmv':
+			p_obj.save()
+			p_obj.delete()
+		else:
+			pass
+		return redirect('ecommerceapp:adminproductlist')
 class AdminProductCreateView(AdminRequiredMixin, CreateView):
 	template_name = 'adminpages/adminproductcreate.html'
 	form_class = ProductForm
