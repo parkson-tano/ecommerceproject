@@ -1,0 +1,13 @@
+{% extends "adminpages/adminbase.html" %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Add New Product
+{% endblock title %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{form|crispy}}
+    <input type="submit" value="Update">
+</form>
+{% endblock %}

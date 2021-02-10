@@ -30,7 +30,8 @@
                         <td> <img src='{{ p.image.url }}' style='height: 75px'>  </td>
                         <td>{{ p.selling_price }}</td>
                         <td>{{ p.view_count }}</td>
-                        <td> <a href= "{% url 'ecommerceapp:adminmanageproduct' p.id %}?action=rmv"> Remove </a> </td>
+                        <td> <a href= "{% url 'ecommerceapp:adminproductdelete' p.id %}" class='btn btn-danger'> X </a>
+                        <a href= "{% url 'ecommerceapp:adminproductedit' p.id %}" class='btn btn-primary'> edit </a> </td>
                     </tr>
                     {% endfor %}
                 </tbody>

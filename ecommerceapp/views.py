@@ -7,6 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DetailView, FormView, ListView,
                                   TemplateView, View)
+from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib import messages
 from .forms import *
 from .models import *
@@ -445,3 +446,14 @@ class AdminProductCreateView(AdminRequiredMixin, CreateView):
 			ProductImage.objects.create(product=p, image=i)
 		return super().form_valid(form)
 
+class AdminProductEditView(AdminRequiredMixin, UpdateView):
+	template_name = 'adminpages/adminproductedit.html'
+	model = Product
+	success_url = reverse_lazy('ecommerceapp:adminproductlist')
+	fields = ['title','slug','category','image', 'marked_price',
+		'selling_price', 'description', 'warranty', 'return_policy']
+
+class AdminProductdeleteView(AdminRequiredMixin, DeleteView):
+	template_name = 'adminpages/product_confirm_delete.html'
+	model = Product
+	success_url = reverse_lazy('ecommerceapp:adminproductlist')
