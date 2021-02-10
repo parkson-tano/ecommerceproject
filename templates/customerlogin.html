@@ -20,6 +20,7 @@
                 <p> <a href=" {% url "ecommerceapp:customerregistration" %} 
                     {% if request.GET.next %}?next={{request.GET.next}} 
                 {% endif %}">Already has an account?</a></p>
+				<span><a href="{% url 'ecommerceapp:password_reset' %}">Forgot Password</a></span>
     		</div>
     	</div>
     </div>

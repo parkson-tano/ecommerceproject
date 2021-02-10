@@ -15,6 +15,7 @@ Customer profile
         <p><span class="font-weight-bold">Address:</span> {{customer.address}} </p>
         <p><span class="font-weight-bold">Joined on:</span> {{customer.joined_on}} </p>
         <p><span class="font-weight-bold">Last seen:</span> {{customer.user.last_login|timesince}} </p>
+        <p><button class="btn"><a href="{% url 'ecommerceapp:password_change' %}">Change Password</a></button></p>
     </div>
     <div class="col-md-8">
         <h3>Previous Order</h3>

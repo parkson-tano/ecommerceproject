@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import *
-
+from django.contrib.auth import views as auth_views
 app_name = 'ecommerceapp'
 
 urlpatterns = [
@@ -22,11 +22,14 @@ urlpatterns = [
 	path('register/', CustomerRegistrationView.as_view(), name='customerregistration'),
 	path('login/', CustomerLoginView.as_view(), name='customerlogin'),
 	path('logout/', CustomerLogoutView.as_view(), name='customerlogout'),
+	path('password_change', passwordchange, name='password_change'),
+    path('password_reset', password_reset_request, name="password_reset"),
 
 	path('profile/', CustomerProfileView.as_view(), name='customerprofile'),
 	path('profile/order-<int:pk>', CustomerOrderDetailView.as_view(), name='customerorderdetails'),
 	path('search/', SearchView.as_view(), name='search'),
 	
+
 
 	##admin view
 	path('admin-login', AdminLoginView.as_view(), name='adminlogin'),
