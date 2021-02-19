@@ -1,0 +1,37 @@
+Content-Type: multipart/alternative;
+ boundary="===============4559653753114907980=="
+MIME-Version: 1.0
+Subject: Confirm your email
+From: noreply@aliasaddress.com
+To: tanocer@gmail.com
+Date: Mon, 15 Feb 2021 08:40:45 -0000
+Message-ID: <161337844514.13824.1384607078637548624@DANIEL-PC>
+
+--===============4559653753114907980==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+You are almost there, new dani!
+Please click the following link to confirm your account: http://127.0.0.1:8000/email/dGFub2NlckBnbWFpbC5jb20-ai3uvx-fb27e4699d059e4b211b24dd34d384d6a3b7ab9f
+The token expires on 11:40 a.m.
+--===============4559653753114907980==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Confirmation</title>
+</head>
+<body>
+<h1>You are almost there, new dani!</h1><br>
+<h2>Please click <a href="http://127.0.0.1:8000/email/dGFub2NlckBnbWFpbC5jb20-ai3uvx-fb27e4699d059e4b211b24dd34d384d6a3b7ab9f">here</a> to confirm your account</h2>
+<h2>The token expires on 11:40 a.m.</h2>
+</body>
+</html>
+--===============4559653753114907980==--
+
+-------------------------------------------------------------------------------

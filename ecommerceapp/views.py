@@ -19,7 +19,8 @@ from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib import messages
-
+from verify_email.email_handler import send_verification_email
+from django_email_verification import send_email
 # Create your views here.
 class EcoMixin(object):
 
@@ -251,8 +252,10 @@ class CustomerRegistrationView(CreateView):
 		email = form.cleaned_data.get('email')
 		user = User.objects.create_user(username, email, password)
 		form.instance.user = user
-		login(self.request, user)
-		return super().form_valid(form)
+		# login(self.request, user)
+		returnVal =  super().form_valid(form)
+		send_email(user)
+		return returnVal
 
 class CustomerLoginView(FormView):
 	template_name = 'customerlogin.html'

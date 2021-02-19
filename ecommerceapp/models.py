@@ -76,7 +76,7 @@ ORDER_STATUS = (
 
 METHOD = (
 	("Cash On Delivery", "Cash On Delivery"),
-	('Khalti', 'Khalti'),
+	('Mobile Money', 'Mobile Money'),
 
 )
 class Order(models.Model):
