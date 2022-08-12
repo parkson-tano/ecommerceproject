@@ -6,10 +6,7 @@ admin.site.register([Category, Cart, Product, CartProduct, Order, Admin, Product
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    '''
-        Admin View for Customer
-    '''
-    list_display = ('user','full_name')
-    list_filter = ('full_name',)
+    list_display = ('user',)
+    # list_filter = ('full_name',)
 
 admin.site.register(Customer, CustomerAdmin)

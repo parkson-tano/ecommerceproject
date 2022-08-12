@@ -1,5 +1,8 @@
+from enum import unique
+from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User
+from autoslug import AutoSlugField
 # Create your models here.
 
 class Admin(models.Model):
@@ -10,24 +13,35 @@ class Admin(models.Model):
 
 	def __str__(self):
 		return self.user.username
-
+ACC_TYPE = (
+	('buyer', 'Buyer'),
+	('seller', 'Seller')
+)
 
 class Customer(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	full_name = models.CharField(max_length=200)
-	address = models.CharField(max_length=200, null=True,  blank=True)
+	first_name = models.CharField(max_length=200)
+	last_name = models.CharField(max_length=300, null=True,  blank=True)
+	quater = models.CharField(max_length=200, null=True,  blank=True)
+	country = models.CharField(max_length=100, null=True,  blank=True)
+	region = models.CharField(max_length=256, null=True,  blank=True)
+	town = models.CharField(max_length=256, null=True,  blank=True)
+	store_address = models.CharField(max_length=256, null=True,  blank=True)
+	phone_number = models.IntegerField(null=True,  blank=True)
+	account_type = models.CharField(max_length=256, choices=ACC_TYPE, default='buyer')
 	joined_on = models.DateTimeField(auto_now_add=True)
 	
 class Category(models.Model):
 	title = models.CharField(max_length=200)
-	slug = models.SlugField(unique=True)
+	slug = AutoSlugField(populate_from='title', unique=True)
 
 	def __str__(self):
 		return self.title
 
 class Product(models.Model):
+	seller = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
 	title = models.CharField(max_length=200)
-	slug = models.SlugField(unique=True)
+	slug = AutoSlugField(populate_from='title', unique=True)
 	category =models.ForeignKey(Category, on_delete=models.CASCADE)
 	image = models.ImageField(upload_to='products')
 	marked_price = models.PositiveIntegerField()

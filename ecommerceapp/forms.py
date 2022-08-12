@@ -13,7 +13,7 @@ class CustomerRegistrationForm(forms.ModelForm):
 	email = forms.CharField(widget=forms.EmailInput())
 	class Meta:
 		model = Customer
-		fields = ['username','password','email','full_name', 'address']
+		fields = "__all__"
 
 	
 	def clean_username(self):
@@ -41,17 +41,14 @@ class ProductForm(forms.ModelForm):
 	}))
 	class Meta:
 		model = Product
-		fields = ['title','slug','category','image', 'marked_price',
+		fields = ['title','category','image', 'marked_price',
 		'selling_price', 'description', 'warranty', 'return_policy']
 
 		widgets = {
 			"title": forms.TextInput(attrs= { 
 				'placeholder': 'Enter the Product Title'
 			}),
-			"slug": forms.TextInput(attrs= { 
-				'placeholder': 'Enter the Product slug'
-			}),
-				"marked_price": forms.NumberInput(attrs= { 
+			"marked_price": forms.NumberInput(attrs= { 
 				'placeholder': 'Enter the Marked_Price'
 			}),
 			"selling_price": forms.NumberInput(attrs= { 

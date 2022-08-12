@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +26,7 @@ SECRET_KEY = 'v#)chd(m$8-1*dbazlgvii--__!or(#f7mrscuarg9tt0f@7@k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "danitanolive.herokuapp.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'ecommerceapp',
     'crispy_forms',
-    'verify_email',
-    'django_email_verification',
+
 
 ]
 
@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'ecommerceproject.urls'
@@ -184,3 +185,5 @@ EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
 
 
 ROOT_URLCONF = 'ecommerceproject.urls'
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'

@@ -19,8 +19,6 @@ from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib import messages
-from verify_email.email_handler import send_verification_email
-from django_email_verification import send_email
 # Create your views here.
 class EcoMixin(object):
 
