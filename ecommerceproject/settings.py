@@ -39,11 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'ecommerceapp',
     'crispy_forms',
-
-
 ]
 
 
@@ -74,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'ecommerceapp.cat_processor.category_renderer',
             ],
         },
     },

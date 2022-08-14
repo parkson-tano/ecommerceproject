@@ -41,8 +41,8 @@ class ProductForm(forms.ModelForm):
 	}))
 	class Meta:
 		model = Product
-		fields = ['title','category','image', 'marked_price',
-		'selling_price', 'description', 'warranty', 'return_policy']
+		fields = ['title','category','marked_price',
+		'selling_price', 'description','quantity', 'contact', 'town', 'warranty', 'return_policy','image']
 
 		widgets = {
 			"title": forms.TextInput(attrs= { 
@@ -65,8 +65,8 @@ class ProductForm(forms.ModelForm):
 				"return_policy": forms.TextInput(attrs= { 
 				'placeholder': 'Enter the Product return policy'
 			}),
-			"image": forms.FileInput(attrs= { 
-				'class':'form-control'
-			}),
 
+		}
+		labels = {
+			'title': 'Product Title',
 		}

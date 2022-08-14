@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+add product
+{% endblock title %}
+{% block content %}
+<div class="row p-sm-5 m-md-3 justify-content-center py-5">
+    <div class="col col-lg-6 border-0">
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <strong>{{error}}</strong>
+        </div>
+        {% endif %}
+            <div class="card rounded-5 border-0" style="width: 100%">
+                <div class="card-title ml-3">
+                    <span>
+                        <p>
+                            <span class="font-weight-bold h3">Sell Your Product</span> <br />
+                            It's quick and easy
+                        </p>
+                    </span>
+                </div>
+                <hr />
+                <div class="card-body p-sm-2 mt-2">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <button class="btn btn-info">Upload Product</button>
+                </form>
+
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

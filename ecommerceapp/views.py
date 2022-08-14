@@ -393,6 +393,21 @@ class SearchView(TemplateView):
 		context['results'] = results 
 		return context
 
+class AddProductView(CreateView):
+	template_name = 'addproduct.html'
+	form_class = ProductForm
+	success_url = reverse_lazy('ecommerceapp:index')
+
+	def form_valid(self, form):
+		form.instance.seller = self.request.user
+		p = form.save()
+		images = self.request.FILES.getlist('more_images')
+		for i in images:
+			ProductImage.objects.create(product=p, image=i)
+		return super().form_valid(form)
+
+
+
 ### ---------admin class----------
 class AdminLoginView(FormView):
 	template_name = 'adminpages/adminlogin.html'

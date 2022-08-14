@@ -2,6 +2,7 @@ from enum import unique
 from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 from autoslug import AutoSlugField
 # Create your models here.
 
@@ -28,6 +29,7 @@ class Customer(models.Model):
 	town = models.CharField(max_length=256, null=True,  blank=True)
 	store_address = models.CharField(max_length=256, null=True,  blank=True)
 	phone_number = models.IntegerField(null=True,  blank=True)
+	verified = models.BooleanField(default=False)
 	account_type = models.CharField(max_length=256, choices=ACC_TYPE, default='buyer')
 	joined_on = models.DateTimeField(auto_now_add=True)
 	
@@ -38,18 +40,29 @@ class Category(models.Model):
 	def __str__(self):
 		return self.title
 
+
+
 class Product(models.Model):
-	seller = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+	seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+	# seller_type = models.CharField(max_length=156, choices=ACC_TYPE,  default="personal")
 	title = models.CharField(max_length=200)
-	slug = AutoSlugField(populate_from='title', unique=True)
 	category =models.ForeignKey(Category, on_delete=models.CASCADE)
 	image = models.ImageField(upload_to='products')
 	marked_price = models.PositiveIntegerField()
 	selling_price = models.PositiveIntegerField()
 	description = models.TextField()
+	quantity = models.IntegerField(default=0)
+	town = models.CharField(max_length=256, null=True, blank=True)
 	warranty = models.CharField(max_length=300, null=True, blank = True)
 	return_policy = models.CharField(max_length=300, null=True, blank=True)
+	contact = models.BigIntegerField(null=True, blank=True)
 	view_count = models.PositiveIntegerField(default=0)
+	date_created = models.DateTimeField(default=now)
+	slug = AutoSlugField(
+		populate_from=lambda instance: instance.title,
+                         unique_with=['seller__customer__first_name', 'date_created__month'],
+                         slugify=lambda value: value.replace(' ','-')
+	)
 
 
 	def __str__(self):
